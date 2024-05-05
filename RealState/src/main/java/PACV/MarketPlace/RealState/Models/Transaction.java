@@ -15,7 +15,7 @@ public class Transaction {
     Long Id;
 
     @OneToOne
-    Property property;
+    Transaction property;
 
     String transactionType;
 
@@ -35,11 +35,11 @@ public class Transaction {
         Id = id;
     }
 
-    public Property getProperty() {
+    public Transaction getTransaction() {
         return property;
     }
 
-    public void setProperty(Property property) {
+    public void setTransaction(Transaction property) {
         this.property = property;
     }
 

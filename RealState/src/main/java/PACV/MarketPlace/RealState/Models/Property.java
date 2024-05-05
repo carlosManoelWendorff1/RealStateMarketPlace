@@ -25,6 +25,12 @@ public class Property {
     private Location location;
 
 
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
     public Location getLocation() {
         return location;
     }
