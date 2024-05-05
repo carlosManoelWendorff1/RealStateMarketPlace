@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-RealStateApplication<RealState>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "PACV.MarketPlace.RealState.RealStateApplication",
+            "projectName": "RealState",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
