@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import PACV.MarketPlace.RealState.Models.Location;
 import PACV.MarketPlace.RealState.Models.Property;
+import PACV.MarketPlace.RealState.Repositories.LocationRepository;
 import PACV.MarketPlace.RealState.Repositories.PropertyRepository;
 
 import java.util.Optional;
@@ -16,6 +18,9 @@ public class PropertyService{
 
     @Autowired
     PropertyRepository propertyRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
     
     public List<Property> getAllProperties(){
         return  (List<Property>) propertyRepository.findAll();
@@ -30,6 +35,15 @@ public class PropertyService{
     }
 
     public HttpStatus setProperty(Property property){
+
+        Location location = property.getLocation();
+        
+        // Save the location if it's not already persisted
+        if (location != null && location.getId() == 0) {
+            location = locationRepository.save(location);
+            property.setLocation(location);
+        }
+        
         this.propertyRepository.save(property);
 
         if(propertyRepository.existsById(property.getId())){
