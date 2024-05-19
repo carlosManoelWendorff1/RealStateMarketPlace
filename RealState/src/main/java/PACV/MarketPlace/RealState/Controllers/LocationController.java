@@ -25,7 +25,8 @@ public class LocationController {
     
     @Autowired
     LocationService locationService;
-
+    
+    @CrossOrigin
     @GetMapping("oneByName")
     public Optional<Location> getOneLocationByName(@RequestParam Long locationName) {
         return locationService.getLocationByName(locationName);
