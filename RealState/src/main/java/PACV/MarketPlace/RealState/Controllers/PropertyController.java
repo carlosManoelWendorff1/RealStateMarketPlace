@@ -38,6 +38,11 @@ public class PropertyController {
         return propertyService.getPropertyByTittle(PropertyName);
     }
 
+    @GetMapping("allLike")
+    public List<Property> getAllPropertiesLike(@RequestParam String filterString) {
+        return propertyService.getAllPropertiesLike(filterString);
+    }
+
     @GetMapping("oneById")
     public Optional<Property> getOnePropertyById(@RequestParam Long id) {
         return propertyService.getPropertyById(id);

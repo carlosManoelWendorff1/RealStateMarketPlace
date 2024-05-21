@@ -27,7 +27,11 @@ public class PropertyService{
     }
 
     public List<Property> getPropertyByTittle(String propertyName) {
-        return  propertyRepository.findByTittle(propertyName);
+        return  propertyRepository.findByTitle(propertyName);
+    }
+
+    public List<Property> getAllPropertiesLike(String propertyName) {
+        return  propertyRepository.findByTitleContaining(propertyName);
     }
 
     public Optional<Property> getPropertyById(Long id) {

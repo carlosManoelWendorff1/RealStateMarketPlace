@@ -1,5 +1,7 @@
 package PACV.MarketPlace.RealState.Models;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -13,11 +15,18 @@ public class Property {
     @GeneratedValue
     private long id;
     
-    private String tittle;
+    private String title;
     private String description;
     private double price;
     private long size;
+    private List<String> imagesUrl;
 
+    public List<String> getImagesUrl() {
+        return imagesUrl;
+    }
+    public void setImagesUrl(List<String> imagesUrl) {
+        this.imagesUrl = imagesUrl;
+    }
     @ManyToOne
     private User owner;
 
@@ -37,11 +46,11 @@ public class Property {
     public void setLocation(Location location) {
         this.location = location;
     }
-    public String getTittle() {
-        return tittle;
+    public String getTitle() {
+        return title;
     }
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
+    public void setTittle(String title) {
+        this.title = title;
     }
     public String getDescription() {
         return description;

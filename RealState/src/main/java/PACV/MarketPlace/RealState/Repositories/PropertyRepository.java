@@ -8,6 +8,9 @@ import java.util.List;
 
 public interface PropertyRepository extends CrudRepository<Property,Long>{
 
-    List<Property> findByTittle(String tittle);
+    List<Property> findByTitle(String title);
+    List<Property> findByTitleContaining(String title);
+
+    
 } 
 
