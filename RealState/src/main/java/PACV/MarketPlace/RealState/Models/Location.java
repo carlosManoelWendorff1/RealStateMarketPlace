@@ -1,5 +1,7 @@
 package PACV.MarketPlace.RealState.Models;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -16,6 +18,7 @@ public class Location {
     private String state;
     private String country;
     private Long zipCode;
+
     
     public long getId() {
         return id;
@@ -53,9 +56,11 @@ public class Location {
     public void setZipCode(Long zipCode) {
         this.zipCode = zipCode;
     }
+    
     @Override
     public String toString() {
         return "Location [id=" + id + ", address=" + address + ", city=" + city + ", state=" + state + ", country="
                 + country + ", zipCode=" + zipCode + "]";
     }
+    
 }

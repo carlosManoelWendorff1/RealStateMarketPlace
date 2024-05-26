@@ -20,6 +20,7 @@ public class Property {
     private double price;
     private long size;
     private List<String> imagesUrl;
+    private List<String> Optionals;
 
     public List<String> getImagesUrl() {
         return imagesUrl;
@@ -70,5 +71,13 @@ public class Property {
     public void setSize(long size) {
         this.size = size;
     }
+    public void setOptionals(List<String> optionals) {
+        Optionals = optionals;
+    }
+
+    public List<String> getOptionals() {
+        return Optionals;
+    }
+    
     
 }
