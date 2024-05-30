@@ -1,6 +1,5 @@
 package PACV.MarketPlace.RealState.Models;
 
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

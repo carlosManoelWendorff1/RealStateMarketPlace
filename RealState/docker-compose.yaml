@@ -15,7 +15,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   keycloak:
-    image: quay.io/keycloak/keycloak:21.0.1 # substitua pela versão mais recente disponível, se necessário
+    image: keycloak-configurado-real-state # substitua pela versão mais recente disponível, se necessário
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin

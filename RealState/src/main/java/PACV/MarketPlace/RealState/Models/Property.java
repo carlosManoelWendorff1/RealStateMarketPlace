@@ -93,13 +93,6 @@ public class Property {
     public void setOwner(User owner) {
         this.seller = owner;
     }
-    public List<String> getImagesUrl() {
-        return imageSources;
-    }
-    public void setImagesUrl(List<String> imageSources) {
-        this.imageSources = imageSources;
-    }
-   
     public long getId() {
         return id;
     }
@@ -111,12 +104,6 @@ public class Property {
     }
     public void setLocation(Location location) {
         this.location = location;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public void setTittle(String title) {
-        this.title = title;
     }
     public String getDescription() {
         return description;
@@ -139,9 +126,11 @@ public class Property {
     public void setOptionals(List<String> optionals) {
         Optionals = optionals;
     }
-
     public List<String> getOptionals() {
         return Optionals;
+    }
+    public String getTitle() {
+        return title;
     }
     
     

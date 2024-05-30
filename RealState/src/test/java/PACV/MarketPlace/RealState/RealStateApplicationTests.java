@@ -32,7 +32,6 @@ class RealStateApplicationTests {
 
 		Property property = new Property();
 		property.setLocation(local);
-		property.setTittle("casa das primas");
 
 		locationRepository.save(local);
 		propertyRepository.save(property);

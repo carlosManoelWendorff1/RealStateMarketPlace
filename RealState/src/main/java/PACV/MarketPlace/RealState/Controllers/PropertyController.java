@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import PACV.MarketPlace.RealState.Models.Location;
 import PACV.MarketPlace.RealState.Models.Property;
 import java.util.Optional;
 
@@ -29,18 +28,31 @@ public class PropertyController {
     PropertyService propertyService;
 
     @GetMapping("all")
-    public List<Property> getAllProperties() {
-        return propertyService.getAllProperties();
+    public List<Property> getAllProperties(@RequestParam(required = false) String filterString) {
+        if(filterString == null){
+            return propertyService.getAllProperties();
+        }
+        else{
+            return propertyService.getAllPropertiesLike(filterString);
+        }
+        
+    }
+
+    @GetMapping("/search")
+    public List<Property> searchProperties(
+        @RequestParam(required = false) String title,
+        @RequestParam(required = false) String description,
+        @RequestParam(required = false) Double price,
+        @RequestParam(required = false) Long size,
+        @RequestParam(required = false) String ownerName,
+        @RequestParam(required = false) String city) {
+
+        return propertyService.searchProperties(title, description, price, size, ownerName, city);
     }
 
     @GetMapping("oneByName")
     public List<Property> getOnePropertyByName(@RequestParam String PropertyName) {
         return propertyService.getPropertyByTittle(PropertyName);
-    }
-
-    @GetMapping("allLike")
-    public List<Property> getAllPropertiesLike(@RequestParam String filterString) {
-        return propertyService.getAllPropertiesLike(filterString);
     }
 
     @GetMapping("oneById")

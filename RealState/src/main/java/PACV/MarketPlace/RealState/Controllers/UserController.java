@@ -16,7 +16,6 @@ import PACV.MarketPlace.RealState.Models.User;
 import PACV.MarketPlace.RealState.Services.UserService;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController

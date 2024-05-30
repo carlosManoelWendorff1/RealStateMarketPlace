@@ -1,5 +1,6 @@
 package PACV.MarketPlace.RealState.Controllers;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,17 @@ public class LocationController {
         return locationService.getLocationById(id);
     }
 
+    @GetMapping("oneByZipCode")
+    public String getOneLocationByZipCode(@RequestParam Long zipCode)  {
+            try {
+                return locationService.getLocationByZipCode(zipCode);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return "rele";
+            }
+    }
+
     @GetMapping("all")
     public List<Location> getAllLocations() {
         return locationService.getAllLocations();
@@ -46,6 +58,8 @@ public class LocationController {
     public HttpStatus postLocation(@RequestBody Location location) {        
         return locationService.setLocation(location);
     }
+
+    
 
     @PutMapping("one")
     public HttpStatus putLocation(@RequestBody Location location) {        

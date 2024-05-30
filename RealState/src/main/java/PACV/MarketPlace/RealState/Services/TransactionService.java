@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import PACV.MarketPlace.RealState.Models.Transaction;
-import PACV.MarketPlace.RealState.Models.Transaction;
 import PACV.MarketPlace.RealState.Repositories.TransactionRepository;
 
 @Service
