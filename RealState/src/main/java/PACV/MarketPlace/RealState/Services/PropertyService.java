@@ -8,8 +8,13 @@ import org.springframework.stereotype.Service;
 
 import PACV.MarketPlace.RealState.Models.Location;
 import PACV.MarketPlace.RealState.Models.Property;
+import PACV.MarketPlace.RealState.Models.User;
 import PACV.MarketPlace.RealState.Repositories.LocationRepository;
 import PACV.MarketPlace.RealState.Repositories.PropertyRepository;
+import PACV.MarketPlace.RealState.Repositories.UserRepository;
+import PACV.MarketPlace.RealState.utils.PropertySpecification;
+
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Optional;
 
@@ -21,7 +26,10 @@ public class PropertyService{
 
     @Autowired
     private LocationRepository locationRepository;
-    
+
+    @Autowired
+    private UserRepository userRepository;
+
     public List<Property> getAllProperties(){
         return  (List<Property>) propertyRepository.findAll();
     }
@@ -34,6 +42,31 @@ public class PropertyService{
         return  propertyRepository.findByTitleContaining(propertyName);
     }
 
+    public List<Property> searchProperties(String title, String description, Double price, Long size, String ownerName, String city) {
+        Specification<Property> spec = Specification.where(null);
+
+        if (title != null && !title.isEmpty()) {
+            spec = spec.and(PropertySpecification.hasTitle(title));
+        }
+        if (description != null && !description.isEmpty()) {
+            spec = spec.and(PropertySpecification.hasDescription(description));
+        }
+        if (price != null) {
+            spec = spec.and(PropertySpecification.hasPrice(price));
+        }
+        if (size != null) {
+            spec = spec.and(PropertySpecification.hasSize(size));
+        }
+        if (ownerName != null && !ownerName.isEmpty()) {
+            spec = spec.and(PropertySpecification.hasOwnerName(ownerName));
+        }
+        if (city != null && !city.isEmpty()) {
+            spec = spec.and(PropertySpecification.hasLocationCity(city));
+        }
+
+        return propertyRepository.findAll(spec);
+    }
+
     public Optional<Property> getPropertyById(Long id) {
         return  propertyRepository.findById(id);
     }
@@ -41,11 +74,16 @@ public class PropertyService{
     public HttpStatus setProperty(Property property){
 
         Location location = property.getLocation();
-        
+        User owner = property.getOwner();
+
         // Save the location if it's not already persisted
         if (location != null && location.getId() == 0) {
             location = locationRepository.save(location);
             property.setLocation(location);
+        }
+        if (owner != null && owner.getId() == 0) {
+            owner = userRepository.save(owner);
+            property.setOwner(owner);
         }
         
         this.propertyRepository.save(property);

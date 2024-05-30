@@ -35,8 +35,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> {
                     try {
                         authz
-                                .requestMatchers("/login**", "/login/refresh**", "/logout**").permitAll()
-                                .anyRequest().authenticated();
+                                .requestMatchers("/login**", "/login/refresh**", "/logout**","/**").permitAll()
+                                .anyRequest().permitAll();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

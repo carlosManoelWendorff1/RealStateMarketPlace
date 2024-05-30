@@ -37,7 +37,7 @@ public class SessionService {
 	protected static final String URl_INTROSPECT = "http://localhost:8080/realms/realState/protocol/openid-connect/token/introspect";
 	protected static final String REALM = "realState";
 	protected static final String CLIENT = "realStateClient";
-	protected static final String CLIENT_SECRET = "bls7baCIA03Fqx35kEetqUoMjK1gmrfa";
+	protected static final String CLIENT_SECRET = "HSGbOBBo7VBguM9cZIteHyaEj9646cFb";
 	protected static Gson gson = new Gson();
 	protected static UserRole userRole = new UserRole();
 

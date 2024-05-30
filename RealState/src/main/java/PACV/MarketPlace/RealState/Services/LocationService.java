@@ -1,6 +1,12 @@
 
 package PACV.MarketPlace.RealState.Services;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +29,38 @@ public class LocationService {
 
     public Optional<Location> getLocationById(Long id) {
         return  LocationRepository.findById(id);
+    }
+
+    public String getLocationByZipCode(Long id) throws IOException {
+        String urlString = "http://viacep.com.br/ws/"+id;
+        URL url = new URL(urlString);
+        System.out.println(url);
+        HttpURLConnection connection = (HttpURLConnection) 
+        url.openConnection();
+        connection.setRequestMethod("GET");
+        int responseCode = connection.getResponseCode();
+        System.out.println(responseCode);
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            throw new IOException("Error: HTTP response code " + responseCode);
+        }
+
+        // Read response content
+        InputStream inputStream = (InputStream) connection.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+        String line;
+        StringBuilder responseContent = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            responseContent.append(line);
+            responseContent.append("\n"); // Add newline for readability
+        }
+        reader.close();
+
+        // Process response content here
+        System.out.println("Response content:");
+        System.out.println(responseContent.toString());
+
+        return responseContent.toString();
     }
 
     public HttpStatus setLocation(Location location){

@@ -21,20 +21,27 @@ public class Property {
     private long size;
     private List<String> imagesUrl;
     private List<String> Optionals;
-
-    public List<String> getImagesUrl() {
-        return imagesUrl;
-    }
-    public void setImagesUrl(List<String> imagesUrl) {
-        this.imagesUrl = imagesUrl;
-    }
+    
     @ManyToOne
     private User owner;
 
     @OneToOne
     private Location location;
 
-
+    
+    
+    public User getOwner() {
+        return owner;
+    }
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+    public List<String> getImagesUrl() {
+        return imagesUrl;
+    }
+    public void setImagesUrl(List<String> imagesUrl) {
+        this.imagesUrl = imagesUrl;
+    }
     public long getId() {
         return id;
     }
@@ -46,12 +53,6 @@ public class Property {
     }
     public void setLocation(Location location) {
         this.location = location;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public void setTittle(String title) {
-        this.title = title;
     }
     public String getDescription() {
         return description;
@@ -77,6 +78,12 @@ public class Property {
 
     public List<String> getOptionals() {
         return Optionals;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
     
     

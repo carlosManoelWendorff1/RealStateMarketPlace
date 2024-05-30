@@ -3,6 +3,8 @@ package PACV.MarketPlace.RealState.Models;
 import java.sql.Time;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -18,8 +20,9 @@ public class User {
     String fullName;
 
     String email;
-    
-    Enum<UserEnum> userType;
+
+    @Enumerated(EnumType.STRING)    
+    UserEnum userType;
 
     Time registerDate;
 
@@ -59,7 +62,7 @@ public class User {
     }
 
 
-    public void setUserType(Enum<UserEnum> userType) {
+    public void setUserType(UserEnum userType) {
         this.userType = userType;
     }
 
