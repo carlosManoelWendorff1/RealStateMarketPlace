@@ -13,15 +13,24 @@ public class User {
 
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
 
-    String fullName;
+    private String fullName;
 
-    String email;
+    private String email;
     
-    Enum<UserEnum> userType;
+    private Time registerDate;
 
-    Time registerDate;
+    private String avatarUrl;
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 
 
     public Long getId() {
@@ -51,16 +60,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-
-    public Enum<UserEnum> getUserType() {
-        return userType;
-    }
-
-
-    public void setUserType(Enum<UserEnum> userType) {
-        this.userType = userType;
     }
 
 
