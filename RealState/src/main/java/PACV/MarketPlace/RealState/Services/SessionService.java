@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,13 +32,14 @@ import com.google.gson.reflect.TypeToken;
 public class SessionService {
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
+	@Value("${realState.security.clientSecret}")
+    private String CLIENT_SECRET;
 	protected static final String URL = "http://localhost:8080/realms/realState/protocol/openid-connect/token";
 	protected static final String URl_LOGOUT = "http://localhost:8080/realms/realState/protocol/openid-connect/logout";
 	protected static final String URl_INTROSPECT = "http://localhost:8080/realms/realState/protocol/openid-connect/token/introspect";
 	protected static final String REALM = "realState";
 	protected static final String CLIENT = "realStateClient";
-	protected static final String CLIENT_SECRET = "bls7baCIA03Fqx35kEetqUoMjK1gmrfa";
 	protected static Gson gson = new Gson();
 	protected static UserRole userRole = new UserRole();
 
