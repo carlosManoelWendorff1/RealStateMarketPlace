@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import PACV.MarketPlace.RealState.Models.Property;
@@ -61,8 +62,8 @@ public class PropertyController {
     }
 
     @PostMapping("one")
-    public HttpStatus postProperty(@RequestBody Property Property) {        
-        return propertyService.setProperty(Property);
+    public HttpStatus postProperty(@RequestBody Property Property,@RequestHeader String token) {        
+        return propertyService.setProperty(Property,token);
     }
 
     @PutMapping("one")

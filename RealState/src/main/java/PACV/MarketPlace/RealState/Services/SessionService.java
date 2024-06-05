@@ -3,6 +3,7 @@ package PACV.MarketPlace.RealState.Services;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 import org.springframework.web.client.HttpServerErrorException.InternalServerError;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -35,9 +37,9 @@ public class SessionService {
 
 	@Value("${realState.security.clientSecret}")
     private String CLIENT_SECRET;
-	protected static final String URL = "http://localhost:8080/realms/realState/protocol/openid-connect/token";
-	protected static final String URl_LOGOUT = "http://localhost:8080/realms/realState/protocol/openid-connect/logout";
-	protected static final String URl_INTROSPECT = "http://localhost:8080/realms/realState/protocol/openid-connect/token/introspect";
+	protected static final String URL = "http://localhost:8090/realms/realState/protocol/openid-connect/token";
+	protected static final String URl_LOGOUT = "http://localhost:8090/realms/realState/protocol/openid-connect/logout";
+	protected static final String URl_INTROSPECT = "http://localhost:8090/realms/realState/protocol/openid-connect/token/introspect";
 	protected static final String REALM = "realState";
 	protected static final String CLIENT = "realStateClient";
 	protected static Gson gson = new Gson();
@@ -98,8 +100,7 @@ public class SessionService {
 		}
 	}
 	
-	public ResponseEntity<String> getIntrospect(String accessToken) {
-		
+	public ResponseEntity<Map<String, Object>> getIntrospect(String accessToken) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
@@ -110,7 +111,19 @@ public class SessionService {
 		
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 		
-		return postIntoKeycloak(request, URl_INTROSPECT);
+		ResponseEntity<String> response = postIntoKeycloak(request, URl_INTROSPECT);
+		if (response.getStatusCode().is2xxSuccessful()) {
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				Map<String, Object> introspectResponse = mapper.readValue(response.getBody(), Map.class);
+				return new ResponseEntity<>(introspectResponse, response.getStatusCode());
+			} catch (Exception e) {
+				logger.error("Failed to parse introspect response", e);
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} else {
+			return new ResponseEntity<>(response.getStatusCode());
+		}
 	}
 
 	private ResponseEntity<String> postIntoKeycloak(HttpEntity<MultiValueMap<String, String>> request, String url) {
@@ -133,38 +146,38 @@ public class SessionService {
 		}
 	}
 	
-	protected List<String> getUserRolesValue(String accessToken) {
-		accessToken = "Bearer " + accessToken;
-		String userData = this.getIntrospect(accessToken.substring(7)).getBody();
+	// protected List<String> getUserRolesValue(String accessToken) {
+	// 	accessToken = "Bearer " + accessToken;
+	// 	String userData = this.getIntrospect(accessToken.substring(7)).getBody();
 		
-		// Parse user data and check if it contains the expected structure
-		JsonObject userJsonObject = gson.fromJson(userData, JsonObject.class);
+	// 	// Parse user data and check if it contains the expected structure
+	// 	JsonObject userJsonObject = gson.fromJson(userData, JsonObject.class);
 	
-		if (userJsonObject != null) {
-			// Check if "realm_access" is present and is a JSON object
-			JsonElement realmAccessElement = userJsonObject.get("realm_access");
+	// 	if (userJsonObject != null) {
+	// 		// Check if "realm_access" is present and is a JSON object
+	// 		JsonElement realmAccessElement = userJsonObject.get("realm_access");
 	
-			if (realmAccessElement != null && realmAccessElement.isJsonObject()) {
-				// If "realm_access" is a valid JSON object, proceed to get the "roles" array
-				JsonObject realmAccessObject = realmAccessElement.getAsJsonObject();
-				JsonElement rolesElement = realmAccessObject.get("roles");
+	// 		if (realmAccessElement != null && realmAccessElement.isJsonObject()) {
+	// 			// If "realm_access" is a valid JSON object, proceed to get the "roles" array
+	// 			JsonObject realmAccessObject = realmAccessElement.getAsJsonObject();
+	// 			JsonElement rolesElement = realmAccessObject.get("roles");
 	
-				if (rolesElement != null && rolesElement.isJsonArray()) {
-					// Parse the "roles" array into a list of strings
-					Type listType = new TypeToken<List<String>>() {}.getType();
-					List<String> userRoleNames = gson.fromJson(rolesElement.getAsJsonArray(), listType);
+	// 			if (rolesElement != null && rolesElement.isJsonArray()) {
+	// 				// Parse the "roles" array into a list of strings
+	// 				Type listType = new TypeToken<List<String>>() {}.getType();
+	// 				List<String> userRoleNames = gson.fromJson(rolesElement.getAsJsonArray(), listType);
 	
-					// Return the user roles
-					return userRole.getAllValuesByName(userRoleNames);
-				} else {
-				}
-			} else {
-			}
-		} else {
-		}
+	// 				// Return the user roles
+	// 				return userRole.getAllValuesByName(userRoleNames);
+	// 			} else {
+	// 			}
+	// 		} else {
+	// 		}
+	// 	} else {
+	// 	}
 	
-		// Return an empty list if any checks fail
-		return Collections.emptyList();
-	}
+	// 	// Return an empty list if any checks fail
+	// 	return Collections.emptyList();
+	// }
 	
 }

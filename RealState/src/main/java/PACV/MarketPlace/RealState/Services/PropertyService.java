@@ -1,10 +1,16 @@
 package PACV.MarketPlace.RealState.Services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import PACV.MarketPlace.RealState.Models.Location;
 import PACV.MarketPlace.RealState.Models.Property;
@@ -20,6 +26,7 @@ import java.util.Optional;
 
 @Service
 public class PropertyService{
+    private static Logger logger = LoggerFactory.getLogger(SessionService.class);
 
     @Autowired
     PropertyRepository propertyRepository;
@@ -29,6 +36,9 @@ public class PropertyService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SessionService sessionService;
 
     public List<Property> getAllProperties(){
         return  (List<Property>) propertyRepository.findAll();
@@ -71,24 +81,41 @@ public class PropertyService{
         return  propertyRepository.findById(id);
     }
 
-    public HttpStatus setProperty(Property property){
-
+    public HttpStatus setProperty(Property property, String token) {
         Location location = property.getLocation();
         User owner = property.getOwner();
-
+        
+        ResponseEntity<Map<String, Object>> introspectResponse = sessionService.getIntrospect(token);
+        if (introspectResponse.getStatusCode().is2xxSuccessful() && introspectResponse.getBody() != null) {
+            Map<String, Object> tokenData = introspectResponse.getBody();
+            String username = (String) tokenData.get("username");
+            
+            if (username != null) {
+                owner = userRepository.findByFullName(username);
+                property.setOwner(owner);
+            } else {
+                logger.error("Username not found in token introspect response");
+                return HttpStatus.BAD_REQUEST;
+            }
+        } else {
+            logger.error("Failed to introspect token");
+            return (HttpStatus) introspectResponse.getStatusCode();
+        }
+        
         // Save the location if it's not already persisted
         if (location != null && location.getId() == 0) {
             location = locationRepository.save(location);
             property.setLocation(location);
         }
+        
         if (owner != null && owner.getId() == 0) {
             owner = userRepository.save(owner);
             property.setOwner(owner);
         }
         
-        this.propertyRepository.save(property);
-
-        if(propertyRepository.existsById(property.getId())){
+        propertyRepository.save(property);
+        
+        if (propertyRepository.existsById(property.getId())) {
             return HttpStatus.CREATED;
         }
         return HttpStatus.BAD_REQUEST;

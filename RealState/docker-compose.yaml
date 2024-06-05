@@ -25,7 +25,7 @@ services:
       - KC_DB_PASSWORD=password
       - KC_HOSTNAME=localhost
     ports:
-      - "8080:8080"
+      - "8090:8080"
     depends_on:
       - postgres
     command: start-dev
