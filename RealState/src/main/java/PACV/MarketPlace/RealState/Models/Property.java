@@ -1,7 +1,10 @@
 package PACV.MarketPlace.RealState.Models;
 
 import java.util.List;
+import java.util.Set;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -12,8 +15,8 @@ import jakarta.persistence.OneToOne;
 public class Property {
     
     public enum Type{
-        HOUSE,
-        APARTAMENT,
+        House,
+        Apartament,
     }
 
     public enum SellerType{
@@ -33,7 +36,10 @@ public class Property {
     private double price;
     private long size;
     private List<String> imageSources;
-    private List<String> Optionals;
+
+    @Column(name = "optionals")
+    private List<String> optionals;
+    
     private int bedRooms;
     private int bathRoom;
     private int yearBuilt;
@@ -124,10 +130,10 @@ public class Property {
         this.size = size;
     }
     public void setOptionals(List<String> optionals) {
-        Optionals = optionals;
+        optionals = optionals;
     }
     public List<String> getOptionals() {
-        return Optionals;
+        return optionals;
     }
     public String getTitle() {
         return title;

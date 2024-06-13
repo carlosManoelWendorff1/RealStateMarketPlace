@@ -1,13 +1,19 @@
 package PACV.MarketPlace.RealState.Models;
 
 import java.sql.Time;
+import java.util.Date;
 
+import PACV.MarketPlace.RealState.Dto.UserRegisterDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.TemporalType;
+
 
 @Entity
 @Table(name = "app_user")
@@ -19,14 +25,31 @@ public class User {
 
     private String fullName;
 
+    private String userName;
+
     private String email;
-    
-    private Time registerDate;
+
+    @Temporal(TemporalType.TIMESTAMP)    
+    private Date registerDate;
 
     @Enumerated(EnumType.STRING)    
     private UserEnum userType;
 
     private String avatarUrl;
+
+    public User(UserRegisterDto user) {
+        this.email=user.getEmail();
+        this.userName=user.getUserName();
+        this.avatarUrl=user.getAvatarUrl();
+        this.registerDate=user.getRegisterDate();
+        this.fullName=user.getFullName();
+        this.userType=user.getUserType();
+    }
+
+
+    public User() {
+    }
+
 
     public String getAvatarUrl() {
         return avatarUrl;
@@ -77,12 +100,12 @@ public class User {
         this.userType = userType;
     }
 
-    public Time getRegisterDate() {
+    public Date getRegisterDate() {
         return registerDate;
     }
 
 
-    public void setRegisterDate(Time registerDate) {
+    public void setRegisterDate(Date registerDate) {
         this.registerDate = registerDate;
     }
 
@@ -90,6 +113,23 @@ public class User {
     public enum UserEnum {
 		Realtor, Client, Admin, Agent, Seller, Buyer;
 	}
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", fullName=" + fullName + ", userName=" + userName + ", email=" + email
+                + ", registerDate=" + registerDate + ", userType=" + userType + ", avatarUrl=" + avatarUrl + "]";
+    }
 
     
 }

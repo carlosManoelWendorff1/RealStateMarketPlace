@@ -5,18 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
-
-import java.util.stream.Collectors;
 
 
 
@@ -31,29 +26,54 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
-                .authorizeHttpRequests(authz -> {
-                    try {
-                        authz
-                                .requestMatchers("/login**", "/login/refresh**", "/logout**","/**").permitAll()
-                                .anyRequest().authenticated();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                        )
-                        .oauth2ResourceServer((oauth2ResourceServer) ->
-                        oauth2ResourceServer.jwt((jwt) ->
-                                        jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)
-                                        .jwkSetUri(jwkSetUri)
-                                ))
-                .sessionManagement((sessionManagement) -> sessionManagement
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .csrf(csrf -> csrf.disable())
                 .cors(withDefaults())
-                .httpBasic(withDefaults());
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests((requests -> requests
+                        .anyRequest().permitAll()
+                )); // Allow all requests without authentication
         return http.build();
+        // http
+        //         .authorizeHttpRequests(authz -> {
+        //             try {
+        //                 authz
+        //                         .requestMatchers("/login**", 
+        //                         "/login/refresh**",
+        //                          "/logout**",
+        //                          "/introspect",
+        //                          "/userInfo",
+        //                          "/users/register",
+        //                          "/swagger-ui/index.html",
+        //                          "/api-docs",
+        //                          "**swagger-ui**",
+        //                          "/swagger-ui/**",
+        //                          "/v3/api-docs/**",
+        //                          "/v2/api-docs/**",
+        //                          "/swagger-ui.html",
+        //                          "/swagger-resources/**",
+        //                          "/webjars/**",
+        //                          "/api-docs/swagger-config",
+        //                          "/users/info"
+        //                         ).permitAll()
+        //                         .anyRequest().permitAll();
+        //             } catch (Exception e) {
+        //                 e.printStackTrace();
+        //             }
+        //         }
+        //                 )
+        //                 .oauth2ResourceServer((oauth2ResourceServer) ->
+        //                 oauth2ResourceServer.jwt((jwt) ->
+        //                                 jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)
+        //                                 .jwkSetUri(jwkSetUri)
+        //                         ))
+        //         .sessionManagement((sessionManagement) -> sessionManagement
+        //                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        //         )
+        //         .csrf(csrf -> csrf.disable())
+        //         .cors(withDefaults())
+        //         .httpBasic(withDefaults());
+        // return http.build();
     }
 
     @Bean
@@ -66,5 +86,5 @@ public class SecurityConfig {
         config.addAllowedMethod("*"); // Permite todos os métodos.
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
-    }
+    }   
 }

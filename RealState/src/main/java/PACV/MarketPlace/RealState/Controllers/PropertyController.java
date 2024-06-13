@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,7 @@ import PACV.MarketPlace.RealState.Models.Property;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/property/")
+@RequestMapping("/properties")
 public class PropertyController {
     
     @Autowired
@@ -38,16 +39,33 @@ public class PropertyController {
         
     }
 
-    @GetMapping("/search")
-    public List<Property> searchProperties(
-        @RequestParam(required = false) String title,
-        @RequestParam(required = false) String description,
-        @RequestParam(required = false) Double price,
-        @RequestParam(required = false) Long size,
-        @RequestParam(required = false) String ownerName,
-        @RequestParam(required = false) String city) {
+    @GetMapping()
+    public ResponseEntity<List<Property>> searchProperties(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) Long size,
+            @RequestParam(required = false) String fullName,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) Property.Type type,
+            @RequestParam(required = false) Integer minBedrooms,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Long minSize,
+            @RequestParam(required = false) Long maxSize,
+            @RequestParam(required = false) Integer minBathrooms,
+            @RequestParam(required = false) List<Property.SellerType> sellerTypes
+            //,@RequestParam(required = false) List<String> amenities
+            ) {
 
-        return propertyService.searchProperties(title, description, price, size, ownerName, city);
+        List<Property> properties = propertyService.searchProperties(
+                title, description, price, size, fullName, location, type,
+                minBedrooms, minPrice, maxPrice, minSize, maxSize,
+                minBathrooms, sellerTypes
+                //, amenities
+                );
+
+        return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
     @GetMapping("oneByName")

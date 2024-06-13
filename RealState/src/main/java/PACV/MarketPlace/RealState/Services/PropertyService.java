@@ -42,27 +42,79 @@ public class PropertyService{
         return  propertyRepository.findByTitleContaining(propertyName);
     }
 
-    public List<Property> searchProperties(String title, String description, Double price, Long size, String ownerName, String city) {
+    public List<Property> searchProperties(
+            String title,
+            String description,
+            Double price,
+            Long size,
+            String fullName,
+            String city,
+            Property.Type type,
+            Integer minBedrooms,
+            Double minPrice,
+            Double maxPrice,
+            Long minSize,
+            Long maxSize,
+            Integer minBathrooms,
+            List<Property.SellerType> sellerTypes
+            //,List<String> amenities
+            ) {
+
         Specification<Property> spec = Specification.where(null);
 
         if (title != null && !title.isEmpty()) {
             spec = spec.and(PropertySpecification.hasTitle(title));
         }
+
         if (description != null && !description.isEmpty()) {
             spec = spec.and(PropertySpecification.hasDescription(description));
         }
-        if (price != null) {
+
+        if (price != null && price > 0) {
             spec = spec.and(PropertySpecification.hasPrice(price));
         }
-        if (size != null) {
+
+        if (size != null && size > 0) {
             spec = spec.and(PropertySpecification.hasSize(size));
         }
-        if (ownerName != null && !ownerName.isEmpty()) {
-            spec = spec.and(PropertySpecification.hasOwnerName(ownerName));
+
+        if (fullName != null && !fullName.isEmpty()) {
+            spec = spec.and(PropertySpecification.hasFullName(fullName));
         }
+
         if (city != null && !city.isEmpty()) {
-            spec = spec.and(PropertySpecification.hasLocationCity(city));
+            spec = spec.and(PropertySpecification.hasLocationContaining(city));
         }
+
+        if (type != null) {
+            spec = spec.and(PropertySpecification.hasType(type));
+        }
+
+        if (minBedrooms != null && minBedrooms > 0 ) {
+            spec = spec.and(PropertySpecification.hasMinBedrooms(minBedrooms));
+        }
+
+        if ( maxPrice != null && minPrice != null && minPrice >= 0 && maxPrice >= 0 && minPrice <= maxPrice) {
+            spec = spec.and(PropertySpecification.hasPriceInRange(minPrice, maxPrice));
+        }
+
+        if (minSize != null && maxSize != null && minSize >= 0 && maxSize >= 0 && minSize <= maxSize ) {
+            spec = spec.and(PropertySpecification.hasSizeInRange(minSize, maxSize));
+        }
+
+        if ( minBathrooms != null && minBathrooms > 0 ) {
+            spec = spec.and(PropertySpecification.hasMinBathrooms(minBathrooms));
+        }
+
+        if (sellerTypes != null && !sellerTypes.isEmpty()) {
+            for (Property.SellerType sellerType : sellerTypes) {
+                spec = spec.and(PropertySpecification.hasSellerType(sellerType));
+            }
+        }
+
+        // if (amenities != null && !amenities.isEmpty()) {
+        //     spec = spec.and(PropertySpecification.hasAmenities(amenities));
+        // }
 
         return propertyRepository.findAll(spec);
     }

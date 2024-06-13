@@ -14,6 +14,7 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
     
      public List<User> getAllUsers() {
         return (List<User>) userRepository.findAll();
@@ -21,11 +22,6 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
-    }
-
-    public User addUser(User user) {
-        userRepository.save(user);
-        return userRepository.findById(user.getId()).orElse(null);
     }
 
     public HttpStatus updateUser(User user){
