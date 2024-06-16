@@ -41,7 +41,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @GetMapping("info")
+    @GetMapping("me")
     public ResponseEntity<User> userInfo(@RequestHeader String Authorization) {
         return userCredentialsService.getUserInfo(Authorization);
     }
