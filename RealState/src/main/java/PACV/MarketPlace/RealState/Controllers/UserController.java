@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @GetMapping("info")
-    public ResponseEntity<User> userInfo(@RequestHeader String authorization) {
-        return userCredentialsService.getUserInfo(authorization);
+    public ResponseEntity<User> userInfo(@RequestHeader String Authorization) {
+        return userCredentialsService.getUserInfo(Authorization);
     }
     @PostMapping("register")
     public ResponseEntity<String> postUser(@RequestBody UserRegisterDto user) {        

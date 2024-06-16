@@ -151,17 +151,20 @@ public class SessionService {
 
 	public ResponseEntity<User> getUserInfo(String accessToken) {
 		// Create a JSONObject from the JSON string
+		accessToken = accessToken.replace("Bearer ", "");
         ResponseEntity<String> introspectResponse = getIntrospect(accessToken);
         JsonObject jsonObject = JsonParser.parseString(introspectResponse.getBody()).getAsJsonObject();
 
+		System.out.println(introspectResponse.getBody());
         // Extract the username
 		try {
 			
 		
         String username = jsonObject.get("username").getAsString();
 
+		System.out.println(username);
 		User user = userRepository.findByUserName(username);
-
+		System.out.println(user.toString());
 		if(user != null){
         	return ResponseEntity.ok(user);
 		}
@@ -210,6 +213,7 @@ public class SessionService {
             if (response.getStatusCode().is2xxSuccessful()) {
 				user.setRegisterDate(new Date()); // Definir a data de registro
 				User userToSave = new User(user);
+				System.out.println(userToSave.toString());
                 userRepository.save(userToSave); // Save the user to your local database
                 return ResponseEntity.ok("User registered successfully");
             } else {
