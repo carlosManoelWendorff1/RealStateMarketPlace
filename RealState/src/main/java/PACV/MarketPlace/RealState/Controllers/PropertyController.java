@@ -28,16 +28,6 @@ public class PropertyController {
     @Autowired
     PropertyService propertyService;
 
-    @GetMapping("all")
-    public List<Property> getAllProperties(@RequestParam(required = false) String filterString) {
-        if(filterString == null){
-            return propertyService.getAllProperties();
-        }
-        else{
-            return propertyService.getAllPropertiesLike(filterString);
-        }
-        
-    }
 
     @GetMapping()
     public ResponseEntity<List<Property>> searchProperties(
@@ -68,27 +58,27 @@ public class PropertyController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
-    @GetMapping("oneByName")
-    public List<Property> getOnePropertyByName(@RequestParam String PropertyName) {
-        return propertyService.getPropertyByTittle(PropertyName);
+    @GetMapping("/{propertyName}")
+    public List<Property> getOnePropertyByName(@PathVariable String propertyName) {
+        return propertyService.getPropertyByTittle(propertyName);
     }
 
-    @GetMapping("oneById")
-    public Optional<Property> getOnePropertyById(@RequestParam Long id) {
+    @GetMapping("/{id}")
+    public Optional<Property> getOnePropertyById(@PathVariable Long id) {
         return propertyService.getPropertyById(id);
     }
 
-    @PostMapping("one")
+    @PostMapping()
     public HttpStatus postProperty(@RequestBody Property Property) {        
         return propertyService.setProperty(Property);
     }
 
-    @PutMapping("one")
+    @PutMapping()
     public HttpStatus putProperty(@RequestBody Property Property) {        
         return propertyService.updateProperty(Property);
     }
 
-    @DeleteMapping("one/{id}")
+    @DeleteMapping("/{id}")
     public HttpStatus deleteProperty(@PathVariable Long id) {        
         return propertyService.removeProperty(id);
     }

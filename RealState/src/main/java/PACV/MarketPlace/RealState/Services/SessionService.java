@@ -155,6 +155,9 @@ public class SessionService {
         JsonObject jsonObject = JsonParser.parseString(introspectResponse.getBody()).getAsJsonObject();
 
         // Extract the username
+		try {
+			
+		
         String username = jsonObject.get("username").getAsString();
 
 		User user = userRepository.findByUserName(username);
@@ -165,6 +168,9 @@ public class SessionService {
 		else{
 			return ResponseEntity.ofNullable(null);
 		}
+	} catch (NullPointerException e) {
+		return ResponseEntity.ofNullable(null);
+	}
 	}
 
 	public ResponseEntity<String> registerUser(UserRegisterDto user) {
