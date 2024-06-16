@@ -58,11 +58,6 @@ public class PropertyController {
         return new ResponseEntity<>(properties, HttpStatus.OK);
     }
 
-    @GetMapping("/{propertyName}")
-    public List<Property> getOnePropertyByName(@PathVariable String propertyName) {
-        return propertyService.getPropertyByTittle(propertyName);
-    }
-
     @GetMapping("/{id}")
     public Optional<Property> getOnePropertyById(@PathVariable Long id) {
         return propertyService.getPropertyById(id);
